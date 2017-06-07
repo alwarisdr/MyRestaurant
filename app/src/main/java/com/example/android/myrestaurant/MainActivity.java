@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private UserTABLE objUserTABLE;
     private OrderTABLE objOrderTABLE;
     private EditText editUser,editPwd;
-    private String strUserchoose,strPwdchoose;
+    private String strUserchoose,strPwdchoose,strName,strPwdTrue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         //testAddValue();
 
         //deleteAlldata
-        deleteAllData();
+        //deleteAllData();
 
         //synJSONToSQLite
         synJSONToSQLite();
@@ -63,8 +63,27 @@ public class MainActivity extends AppCompatActivity {
 
         } else {
 
+            checkUser();
+
         } // if
     }
+
+    private void checkUser() {
+
+        try {
+
+            String strData[] = objUserTABLE.searchValue(strUserchoose);
+            strPwdTrue = strData[2];
+            strName = strData[3];
+
+            Log.d("Restaurant","welcome " + strName);
+
+        } catch (Exception e) {
+            MyAlertDialog objMyAlert = new MyAlertDialog();
+            objMyAlert.errorDialog(MainActivity.this,"No this User","NO "+ strUserchoose +" in my database");
+        }
+
+    } // checkUser
 
     private void bindWidget() {
         editUser = (EditText) findViewById(R.id.editUser);
@@ -88,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         //1.Create objInputstream
         try {
 
-            url = new URL("http://192.168.83.1:81/rest/php_get_data.php");
+            url = new URL("http://192.168.85.1:81/rest/php_get_data.php");
             urlConnection = (HttpURLConnection) url.openConnection();
             objInputstream = urlConnection.getInputStream();
 
